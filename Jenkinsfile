@@ -1,40 +1,39 @@
 pipeline {
     agent any
-
-    environment {
-        IMAGE_NAME = "fastapi-app-app"
-        CONTAINER_NAME = "fastapi-app"
-    }
-
+ 
     stages {
-
-        stage('Clone Code') {
+ 
+        stage('Build') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/shoaibakhtar-star/Sample-app-for-jenkins.git',
-                    credentialsId: 'github-creds'
+                echo 'Building docker image...'
+                sh 'echo Build step running'
+                sh 'docker compose build'
+                
             }
         }
-
-        stage('Build Docker Image') {
+ 
+        stage('Test') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                echo 'Running tests...'
+                sh 'echo Test step running'
             }
         }
-
-        stage('Stop Old Container') {
+ 
+        stage('Deploy') {
             steps {
-                sh '''
-                docker stop $CONTAINER_NAME || true
-                docker rm $CONTAINER_NAME || true
-                '''
+                echo 'Deploying application...'
+                sh 'echo Deploy step running'
+                sh 'docker compose up -d'
             }
         }
-
-        stage('Run New Container') {
-            steps {
-                sh 'docker run -d -p 8000:8000 --name $CONTAINER_NAME $IMAGE_NAME'
-            }
+    }
+ 
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
