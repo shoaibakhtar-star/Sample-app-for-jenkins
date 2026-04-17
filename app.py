@@ -4,7 +4,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello from Jenkins CI/CD 🚀"}
+    return {"message": "Hello from Jenkins CI/CD test🚀"}
 
 @app.get("/health")
 def health():
