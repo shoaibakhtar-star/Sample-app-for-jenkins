@@ -47,7 +47,7 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                sshagent(['ec2-ssh-key']) {
+                sshagent(['vm-ssh-key']) {
                     sh '''
                     ssh -o StrictHostKeyChecking=no ubuntu@$EC2_IP "
                     docker pull $ECR_REPO:$IMAGE_TAG &&
